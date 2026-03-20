@@ -4,16 +4,33 @@ clock=pygame.time.Clock() #clockobject made
 
 HEIGHT=600 #we need to write a code to automatically find the size of
 LENGTH=1000 #the screen of the player and adjust the screen size automatically i gess
-FPS=60
+FPS=12
 """we made them constant for easy to use"""
 
 pygame.init #nothing just starting on game
 #screen = pygame.display.set_mode((1000,600))
 screen = pygame.display.set_mode((LENGTH,HEIGHT))
+pygame.display.set_caption("we are on the box")
 
+
+from background import Background
+Background(screen,(69,69,69),None)
+
+from player import Player
+tom=Player(screen,150,150,64,128,None,(100,200,150))
+jerry=Player(screen,150,0,64,64,None,(100,200,200))
+ground=Player(screen,0,536,1000,64,None,(100,255,200))
+
+""" object=pygame.Rect(300,400,32,32)
+    pygame.draw.rect(screen,(0,250,250),object,0,1,100,-50,90,1110)
+    test code to undersatnt Rect and rect
+"""
 gameloop=True
 
 while gameloop==True:
+        
+
+
     for event in pygame.event.get():#pygame.event.get gives  all events happned in a [list] every frame (60 frame per sec) 
         if event.type == pygame.QUIT : #pygame.QUIT gives  1 if cross red is pressed 
             
