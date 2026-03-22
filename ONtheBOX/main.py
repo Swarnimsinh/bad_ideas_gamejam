@@ -13,6 +13,7 @@ PLAYER_HEIGHT=32
 PLAYER_X=150
 PLAYER_Y=150
 PLAYER_SPEED=20
+BLOCKSIZE=32 #must take h and w if make non square blocks
 ICON=pygame.image.load("enemies\CatBasket.png")
 """we made them constant for easy to use"""
 
@@ -24,7 +25,7 @@ pygame.display.set_caption("we are on the box")
 pygame.display.set_icon(ICON)
 
 
-world=Background(screen,(69,69,69),"background/SKY.png")
+world=Background(screen,(69,69,69),"background/realbg.jpeg")
 #world=Background(screen,(69,69,69),None)
 """ object=pygame.Rect(300,400,32,32)
     pygame.draw.rect(screen,(0,250,250),object,0,1,100,-50,90,1110)
@@ -32,20 +33,23 @@ world=Background(screen,(69,69,69),"background/SKY.png")
 """
 gameloop=True
 object=pygame.Rect(300,400,32,32)
-
+cat=Player(screen,LENGTH-((BLOCKSIZE)*6),HEIGHT-(BLOCKSIZE+BLOCKSIZE+25),BLOCKSIZE,BLOCKSIZE,"enemies\CatBasket.png",2)
 #define player and objects(for now object and plaer both by player class)
 tom=Player(screen,PLAYER_X,PLAYER_Y,PLAYER_FAT,PLAYER_HEIGHT,"enemies\CatBasket.png",1)
-jerry=Stuff(screen,150,0,64,64,None,(100,200,200))
-ground=Stuff(screen,0,536,1000,64,None,(100,255,200))
+floor=[]
+for i in range(0,LENGTH,BLOCKSIZE):
+    jerry=Stuff(screen,i,HEIGHT-BLOCKSIZE,32,32,"lands/forestland.jpeg")
+    floor.append(jerry)
 
 while gameloop==True:
         
-    
-    
-    world.draw() 
-    jerry.draw() 
-    ground.draw()
+   
+    world.draw()  
     tom.draw()
+    cat.draw()
+    for i in floor:
+        i.draw()
+    
 
     for event in pygame.event.get():#pygame.event.get gives  all events happned in a [list] every frame (60 frame per sec) 
         if event.type == pygame.QUIT : #pygame.QUIT gives  1 if cross red is pressed 
