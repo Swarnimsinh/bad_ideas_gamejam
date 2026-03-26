@@ -10,8 +10,8 @@ clock=pygame.time.Clock() #clockobject made
 HEIGHT=608 #we need to write a code to automatically find the size of
 LENGTH=1024 #the screen of the player and adjust the screen size automatically i gess
 FPS=24
-PLAYER_FAT=48
-PLAYER_HEIGHT=77
+PLAYER_FAT=20
+PLAYER_HEIGHT=30
 PLAYER_X=150
 PLAYER_Y=150
 PLAYER_SPEED=20
@@ -82,7 +82,7 @@ while gameloop==True:
     world.draw()  
     # tom.movement()
     
-    tom.update_direction(5)
+    tom.update_direction(5) #gess now unnesassary
     tom.move()
     tom.draw()
     cat.draw()
