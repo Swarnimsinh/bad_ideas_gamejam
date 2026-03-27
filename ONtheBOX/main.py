@@ -14,7 +14,7 @@ PLAYER_FAT=20
 PLAYER_HEIGHT=30
 PLAYER_X=150
 PLAYER_Y=150
-PLAYER_SPEED=20
+PLAYER_SPEED=5
 BLOCKSIZE=32 #must take h and w if make non square blocks
 GRAVITY = 0.5
 PLAYER_VEL = -10
@@ -74,7 +74,7 @@ for (start_col, end_col, row) in platform_layout:
 
 all_blocks = floor + platforms  # keeping them together makes collision easier later
 
-tom=Player(screen,PLAYER_X,PLAYER_Y,PLAYER_FAT,PLAYER_HEIGHT,all_blocks)
+tom=Player(screen,PLAYER_X,PLAYER_Y,PLAYER_FAT,PLAYER_HEIGHT,all_blocks,cat)
 
 while gameloop==True:
         
@@ -82,8 +82,8 @@ while gameloop==True:
     world.draw()  
     # tom.movement()
     
-    tom.update_direction(5) #gess now unnesassary
-    tom.move()
+    tom.update_direction() #gess now unnesassary
+    tom.movement(PLAYER_SPEED)
     tom.draw()
     cat.draw()
     for i in all_blocks:
@@ -99,7 +99,8 @@ while gameloop==True:
             pygame.quit()
             exit()
     
-    tom.movement(PLAYER_SPEED)
+    
+    tom.move()
     
         
     pygame.draw.rect(screen,(0,250,250),object,0,1,100,-50,90,1110)
