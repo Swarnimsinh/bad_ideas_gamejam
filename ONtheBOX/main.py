@@ -119,6 +119,7 @@ while gameloop==True:
         tom.draw()
         cat.draw()
         cat.update(tom)
+        cat.show_door(tom)
         for i in all_blocks:
             i.draw()
 
