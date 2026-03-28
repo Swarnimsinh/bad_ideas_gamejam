@@ -3,6 +3,7 @@ from sys import exit #exit() funtion to close game(properly #1)
 from player import Player
 from backgd import Background
 from stuff import Stuff
+from enemy import Enemy
 import os 
 BASE_DIR = os.path.dirname(__file__)
 clock=pygame.time.Clock() #clockobject made
@@ -36,7 +37,7 @@ pygame.display.set_caption("we are on the box")
 pygame.display.set_icon(ICON)
 
 
-world = Background(screen,(69,69,69),os.path.join(BASE_DIR, "background", "realbg.jpeg"))
+world = Background(screen,(69,69,69),os.path.join(BASE_DIR, "background", "realbg.png"))
 #world=Background(screen,(69,69,69),None)
 """ object=pygame.Rect(300,400,32,32)
     pygame.draw.rect(screen,(0,250,250),object,0,1,100,-50,90,1110)
@@ -44,7 +45,8 @@ world = Background(screen,(69,69,69),os.path.join(BASE_DIR, "background", "realb
 """
 gameloop=True
 object=pygame.Rect(300,400,32,32)
-cat=Stuff(screen,LENGTH-((BLOCKSIZE)*6),HEIGHT-(BLOCKSIZE+BLOCKSIZE+25),BLOCKSIZE,BLOCKSIZE,os.path.join(BASE_DIR, "enemies", "CatBasket.png"),2,None)
+cat=Enemy(screen,LENGTH-((BLOCKSIZE)*6),HEIGHT-(BLOCKSIZE+BLOCKSIZE+25),BLOCKSIZE,BLOCKSIZE,2,None)
+# cat=Enemy(screen,LENGTH-((BLOCKSIZE)*6),HEIGHT-(BLOCKSIZE+BLOCKSIZE+25),BLOCKSIZE,BLOCKSIZE,os.path.join(BASE_DIR, "enemies", "CatBasket.png"),2,None)
 #define player and objects(for now object and plaer both by player class)
 
 # score/lives/game state
@@ -101,6 +103,7 @@ while gameloop==True:
         tom.move()
         tom.draw()
         cat.draw()
+        cat.update(tom)
         for i in all_blocks:
             i.draw()
 
