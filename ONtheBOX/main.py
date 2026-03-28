@@ -4,6 +4,7 @@ from player import Player
 from backgd import Background
 from stuff import Stuff
 from buttons import Button
+from enemy import Enemy
 import os 
 BASE_DIR = os.path.dirname(__file__)
 clock=pygame.time.Clock() #clockobject made
@@ -56,6 +57,7 @@ home_btn = Button(screen, "Home", LENGTH//2, HEIGHT//2 + 50)
 end_restart_btn = Button(screen, "Restart", LENGTH//2, HEIGHT//2 - 25)
 main_menu_btn = Button(screen, "Main Menu", LENGTH//2, HEIGHT//2 + 25)
 world = Background(screen,(69,69,69),os.path.join(BASE_DIR, "background", "realbg.jpeg"))
+world = Background(screen,(69,69,69),os.path.join(BASE_DIR, "background", "realbg.png"))
 #world=Background(screen,(69,69,69),None)
 """ object=pygame.Rect(300,400,32,32)
     pygame.draw.rect(screen,(0,250,250),object,0,1,100,-50,90,1110)
@@ -63,11 +65,12 @@ world = Background(screen,(69,69,69),os.path.join(BASE_DIR, "background", "realb
 """
 gameloop=True
 object=pygame.Rect(300,400,32,32)
-cat=Stuff(screen,LENGTH-((BLOCKSIZE)*6),HEIGHT-(BLOCKSIZE+BLOCKSIZE+25),BLOCKSIZE,BLOCKSIZE,os.path.join(BASE_DIR, "enemies", "CatBasket.png"),2,None)
+cat=Enemy(screen,LENGTH-((BLOCKSIZE)*6),HEIGHT-(BLOCKSIZE+BLOCKSIZE+25),BLOCKSIZE,BLOCKSIZE,2,None)
+# cat=Enemy(screen,LENGTH-((BLOCKSIZE)*6),HEIGHT-(BLOCKSIZE+BLOCKSIZE+25),BLOCKSIZE,BLOCKSIZE,os.path.join(BASE_DIR, "enemies", "CatBasket.png"),2,None)
 #define player and objects(for now object and plaer both by player class)
 
 # score/lives/game state
-lives = 5
+
 hit_cooldown = 0  # frames before another cat hit can reduce a life
 game_over = False
 
@@ -181,6 +184,38 @@ while gameloop==True:
         end_restart_btn.draw()
         main_menu_btn.draw()
          
+    font = pygame.font.Font(None, 32)
+    lives_text = font.render(f"Lives: {tom.health}", True, (255, 255, 255))
+    screen.blit(lives_text, (10, 10))
+
+    if not game_over:
+        tom.movement(PLAYER_SPEED)   # ← moved up here
+        tom.move()
+        tom.draw()
+        cat.draw()
+        cat.update(tom)
+        for i in all_blocks:
+            i.draw()
+
+        if hit_cooldown > 0:
+            hit_cooldown -= 1
+
+        if tom.colliderect(cat) and hit_cooldown <= 0:
+            tom.health -= 1
+            hit_cooldown = FPS  # ek sec ke liye buffer de dete hai taaki player ko ek hit ke baad thoda time mile recover karne ke liye
+
+            if tom.health <= 0:
+                game_over = True
+                dead_sound.play()  # play death sound when game is over
+    else:
+        # game over screen
+        game_over_text = font.render("lil BRO you down bad", True, (255, 0, 0))
+        go_rect = game_over_text.get_rect(center=(LENGTH//2, HEIGHT//2 - 20))
+        screen.blit(game_over_text, go_rect)
+
+        died_text = font.render("LoL FAILED", True, (255, 255, 255))
+        died_rect = died_text.get_rect(center=(LENGTH//2, HEIGHT//2 + 20))
+        screen.blit(died_text, died_rect)
 
 
     for event in pygame.event.get():#pygame.event.get gives  all events happned in a [list] every frame (60 frame per sec) 
@@ -244,6 +279,11 @@ while gameloop==True:
 
     if menu_state == "game": 
         tom.movement(PLAYER_SPEED)
+        if  event.type == pygame.KEYDOWN and event.key==pygame.K_ESCAPE:
+            pygame.quit()
+            exit()
+    
+    #tom.movement(PLAYER_SPEED) someone make me undersatne why a diff move nad movemet is needed its so hard af to debug
     
         
     pygame.draw.rect(screen,(0,250,250),object,0,1,100,-50,90,1110)
