@@ -29,6 +29,10 @@ class Enemy(pygame.Rect):
         self.gamewindow = gamewindow
         self.image = None
         self.colour = None
+        # in __init__ add:
+        self.confused = False
+        self.confused_timer = 0
+        self.confused_frame = pygame.image.load(os.path.join(BASE_DIR, "enemies", "confuse.png"))
 
         self.scale = 1
 
@@ -71,11 +75,16 @@ class Enemy(pygame.Rect):
         self.frame_delay = 10
        
     def update(self, player):
+        
+        if self.confused:
+            self.confused_timer -= 1
+            if self.confused_timer <= 0:
+                self.confused = False
+            return  # skip normal state logic while confused and even swarnim did this in main code
         if self.colliderect(player):
             self.state = "scratch"
         else:
-            self.state = "idle"   
-            
+            self.state = "idle"
     def show_door(self, player):
         if abs(self.right - player.left) < 10: #advance python funtion but just see how near is player
             self.showing_door = True
@@ -90,6 +99,10 @@ class Enemy(pygame.Rect):
                     self.door_index = len(self.door_frames) - 1
         
     def draw(self):
+
+        if self.confused:
+            self.gamewindow.blit(self.confused_frame, self.topleft)
+            return
 
         if self.showing_door:
             image = self.door_frames[self.door_index]
