@@ -29,12 +29,13 @@ class Enemy(pygame.Rect):
         self.gamewindow = gamewindow
         self.image = None
         self.colour = None
+        self.scale = 1
         # in __init__ add:
         self.confused = False
         self.confused_timer = 0
-        self.confused_frame = pygame.image.load(os.path.join(BASE_DIR, "enemies", "confuse.png"))
+        self.confused_frame = self.loadspritesheet(os.path.join(BASE_DIR, "enemies", "confuse-sprite.png"),32,32,scale = 2)
 
-        self.scale = 1
+        
 
         # 🔹 Enemy animations
         self.idle_frames = self.loadspritesheet(
@@ -101,7 +102,7 @@ class Enemy(pygame.Rect):
     def draw(self):
 
         if self.confused:
-            self.gamewindow.blit(self.confused_frame, self.topleft)
+            self.gamewindow.blit(self.confused_frame[0], self.topleft)
             return
 
         if self.showing_door:
